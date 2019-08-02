@@ -14,8 +14,6 @@ const constructor = function(width = 64, height = 64) {
     this.width = width;
     this.height = height;
     
-    this.score = 0;
-    
     this.settings = {
         growthFromFood: 3,
         startingLength: 3,
@@ -62,6 +60,7 @@ proto.randomizeFood = function() {
 proto.newGame = function() {
     //reset score
     this.score = 0;
+    this.gameOver = false;
     
     //init snake
     const snake = this._snakeObj;
@@ -95,8 +94,16 @@ proto.move = function() {
             break;
     }
     
+    if (!this.settings.wrapAround) {
+        if (headX < 0 || headX > this.width - 1) {
+            if (headY < 0 || headY > this.height - 1) {
+                this.gameOver = true;
+            }
+        }
+    }
+    
     if (this.collisionTest(headX, headY)) {
-        this.gameOver();
+        this.gameOver = true;
     }
     
     if (snake.digesting === 0) {
@@ -122,21 +129,37 @@ proto.setDirection = function(d) {
     switch (d) {
         case UP:
         case "up":
-            snake.direction = UP;
+            if (snake.direction !== DOWN) {
+                snake.direction = UP;
+            }
             break;
         case RIGHT:
         case "right":
-            snake.direction = RIGHT;
+            if (snake.direction !== LEFT) {
+                snake.direction = RIGHT;
+            }
             break;
         case DOWN:
         case "down":
-            snake.direction = DOWN;
+            if (snake.direction !== UP) {
+                snake.direction = DOWN;
+            }
             break;
         case LEFT:
         case "left":
-            snake.direction = LEFT;
+            if (snake.direction !== RIGHT) {
+                snake.direction = LEFT;
+            }
             break;
     }
+};
+
+proto.getSnakePos = function() {
+    return this._snakeObj.cells;
+};
+
+proto.getFoodPos = function() {
+    return this._foodObj;
 };
 
 
