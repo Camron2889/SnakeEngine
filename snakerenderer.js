@@ -26,28 +26,28 @@ const proto = constructor.prototype;
 proto.draw = function(cells, food) {
     const cw = this.canvas.width;
     const ch = this.canvas.height;
-    
-    ctx.fillStyle = s.backgroundColor;
-    ctx.fillRect(0, 0, cw, ch);
-    
     const ctx = this.ctx;
-    const s = this.settings;
+    
+    
+    ctx.clearRect(0, 0, cw, ch);
+    
     const tw = this._tileWidth;
     const th = this._tileHeight;
+    const s = this.settings;
     
     ctx.fillStyle = s.snakeColor;
     for (let i = 0; i < cells.length; i++) {
         const cell = cells[i];
         
-        const cellX = cw - cell[0] - tw;
-        const cellY = ch - cell[1] - th;
-        ctx.strokeRect(cellX, cellY, tw, th);
+        const cellX = cell[0] * tw;
+        const cellY = ch - (cell[1] * th) - th;
+        ctx.fillRect(cellX, cellY, tw, th);
     }
     
-    const foodX = cw - food.x - tw;
-    const foodY = ch - food.y - th;
+    const foodX = food.x * tw;
+    const foodY = ch - (food.y * th) - th;
     ctx.fillStyle = s.foodColor;
-    ctx.strokeRect(foodX, foodY, tw, th)
+    ctx.fillRect(foodX, foodY, tw, th)
 };
 
 
