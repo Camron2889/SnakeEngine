@@ -3,13 +3,6 @@ this.snake = this.snake || {};
 snake.Game = (function() {
 "use strict";
 
-//enums
-const MENU = 0;
-const PLAYING = 1;
-const PAUSED = 2;
-const GAMEOVER = 3;
-
-
 const constructor = function(canvas, width = 640, height = 480, columns = 64, rows = 48) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
