@@ -63,6 +63,7 @@ proto.newGame = function() {
     this.gameOver = false;
     
     //init snake
+    this._tickDirection = UP;
     const snake = this._snakeObj;
     snake.cells = [[Math.floor(this.width / 2), Math.floor(this.height / 2)]];
     snake.direction = UP;
@@ -75,6 +76,8 @@ proto.newGame = function() {
 proto.move = function() {
     const snake = this._snakeObj;
     const cells = snake.cells;
+    
+    this._tickDirection = snake.direction;
     
     let headX = cells[0][0];
     let headY = cells[0][1];
@@ -95,10 +98,8 @@ proto.move = function() {
     }
     
     if (!this.settings.wrapAround) {
-        if (headX < 0 || headX > this.width - 1) {
-            if (headY < 0 || headY > this.height - 1) {
-                this.gameOver = true;
-            }
+        if (headX < 0 || headX > this.width - 1 || headY < 0 || headY > this.height - 1) {
+            this.gameOver = true;
         }
     }
     
@@ -118,7 +119,7 @@ proto.move = function() {
     
     const food = this._foodObj;
     if (food.x === headX && food.y === headY) {
-        ++snake.digesting;
+        snake.digesting += this.settings.growthFromFood;
         ++this.score;
         this.randomizeFood();
     }
@@ -126,28 +127,29 @@ proto.move = function() {
 
 proto.setDirection = function(d) {
     const snake = this._snakeObj;
+    const tdir = this._tickDirection;
     switch (d) {
         case UP:
         case "up":
-            if (snake.direction !== DOWN) {
+            if (tdir !== DOWN) {
                 snake.direction = UP;
             }
             break;
         case RIGHT:
         case "right":
-            if (snake.direction !== LEFT) {
+            if (tdir !== LEFT) {
                 snake.direction = RIGHT;
             }
             break;
         case DOWN:
         case "down":
-            if (snake.direction !== UP) {
+            if (tdir !== UP) {
                 snake.direction = DOWN;
             }
             break;
         case LEFT:
         case "left":
-            if (snake.direction !== RIGHT) {
+            if (tdir !== RIGHT) {
                 snake.direction = LEFT;
             }
             break;
