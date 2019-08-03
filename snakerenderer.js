@@ -35,19 +35,25 @@ proto.draw = function(cells, food) {
     const th = this._tileHeight;
     const s = this.settings;
     
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.5)";
+    
     ctx.fillStyle = s.snakeColor;
+    
     for (let i = 0; i < cells.length; i++) {
         const cell = cells[i];
         
         const cellX = cell[0] * tw;
         const cellY = ch - (cell[1] * th) - th;
         ctx.fillRect(cellX, cellY, tw, th);
+        ctx.strokeRect(cellX + 1, cellY + 1, tw - 2, th - 2);
     }
     
     const foodX = food.x * tw;
     const foodY = ch - (food.y * th) - th;
     ctx.fillStyle = s.foodColor;
     ctx.fillRect(foodX, foodY, tw, th)
+    ctx.strokeRect(foodX + 1, foodY + 1, tw - 2, th - 2);
 };
 
 
