@@ -31,8 +31,6 @@ proto.drawBoard = function() {
     const cells = this.engine.getSnakePos();
     const food = this.engine.getFoodPos();
     this.renderer.draw(cells, food);
-    
-    
 };
 
 proto.openGame = function() {
