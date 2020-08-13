@@ -3,7 +3,6 @@ this.snake = this.snake || {};
 snake.Engine = (function() {
 "use strict";
 
-
 //enums
 const UP = 0;
 const RIGHT = 1;
@@ -22,6 +21,10 @@ const constructor = function(width = 64, height = 64) {
     
     this._foodObj = {};
     this._snakeObj = {};
+    
+    //bind stats functions
+    this.stats.distFromTail = this.stats.distFromTail.bind(this);
+    this.stats.distFromFood = this.stats.distFromFood.bind(this);
     
     this.newGame();
 };
@@ -162,6 +165,22 @@ proto.getSnakePos = function() {
 
 proto.getFoodPos = function() {
     return this._foodObj;
+};
+
+//Stats functions for machine learning
+proto.stats = {};
+const stats = proto.stats;
+
+stats.distFromTail = function() {
+    const head = this._snakeObj.cells[0];
+    const tail = this._snakeObj.cells[this._snakeObj.cells.length - 1];
+    return [tail[0] - head[0], tail[1] - head[1]];
+};
+
+stats.distFromFood = function() {
+    const head = this._snakeObj.cells[0];
+    const food = this._foodObj;
+    return [food.x - head[0], food.y - head[1]];
 };
 
 
